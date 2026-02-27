@@ -6,7 +6,7 @@
     <title>Brikon — The Developer's ERP</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -26,6 +26,7 @@
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
         background: var(--bg);
         color: var(--text);
+        scroll-behavior: smooth;
       }
 
       body {
@@ -36,119 +37,311 @@
 
       /* ─── HEADER ──────────────────────────────────────────────── */
       header {
-        background: var(--brand);
-        padding: 0 40px;
-        height: 68px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        padding: 24px 48px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
       }
 
       .logo {
         display: flex;
         align-items: center;
-        gap: 10px;
         text-decoration: none;
       }
 
-      .logo-icon {
-        background: var(--dark);
-        border-radius: 4px;
-        width: 38px;
-        height: 38px;
+      .logo img {
+        height: 150px;
+        width: auto;
+        display: block;
+      }
+
+      .header-right {
         display: flex;
         align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
+        gap: 32px;
       }
 
-      .logo-icon svg { width: 24px; height: 24px; }
-
-      .logo-text {
+      .nav-links {
         display: flex;
-        flex-direction: column;
-        line-height: 1.1;
+        gap: 28px;
+        list-style: none;
       }
 
-      .logo-text .name {
-        font-family: 'Barlow Condensed', sans-serif;
-        font-weight: 900;
-        font-size: 24px;
-        letter-spacing: 2.5px;
-        color: var(--dark);
-        text-transform: uppercase;
-      }
-
-      .logo-text .tagline {
-        font-size: 10px;
-        color: var(--dark);
-        opacity: 0.6;
-        letter-spacing: 0.4px;
+      .nav-links a {
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
         font-weight: 500;
+        color: #fff;
+        text-decoration: none;
+        letter-spacing: 0.3px;
+        transition: opacity 0.2s;
       }
 
-      .btn-login {
-        background: var(--dark);
-        color: #fff;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-weight: 700;
-        font-size: 16px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        padding: 10px 28px;
+      .nav-links a:hover { opacity: 0.7; }
+
+      .btn-contact {
+        background: var(--brand);
+        color: var(--dark);
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px 24px;
         border-radius: var(--radius);
         text-decoration: none;
         transition: background 0.15s, transform 0.15s;
       }
 
-      .btn-login:hover { background: #333; transform: translateY(-1px); }
+      .btn-contact:hover { background: var(--brand-dark); transform: translateY(-1px); }
 
-      /* ─── HERO ────────────────────────────────────────────────── */
+      .btn-login {
+        background: transparent;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 10px 24px;
+        border-radius: var(--radius);
+        border: 1.5px solid rgba(255,255,255,0.6);
+        text-decoration: none;
+        transition: border-color 0.15s, background 0.15s, transform 0.15s;
+      }
+
+      .btn-login:hover {
+        border-color: #fff;
+        background: rgba(255,255,255,0.1);
+        transform: translateY(-1px);
+      }
+
+      /* ─── HERO CAROUSEL ───────────────────────────────────────── */
       .hero {
+        position: relative;
         width: 100%;
-        min-height: 300px;
-        max-height: 85vh;
-        display: block;
+        min-height: 100vh;
         overflow: hidden;
+        background: #111;
       }
 
-      .hero img {
-        width: 100%;
-        height: auto;
-        display: block;
-        object-fit: cover;
+      /* Each slide */
+      .carousel-slide {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0;
+        transition: opacity 1.2s ease-in-out;
       }
 
-      /* ─── YELLOW BAND ─────────────────────────────────────────── */
-      .band {
+      .carousel-slide.active {
+        opacity: 1;
+      }
+
+      /* Dark gradient overlay on top of photos */
+      .carousel-slide::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(0,0,0,0.20) 0%,
+          rgba(0,0,0,0.38) 50%,
+          rgba(0,0,0,0.72) 100%
+        );
+      }
+
+      /* Individual slides */
+      .carousel-slide:nth-child(1) { background-image: url('img/shutterstock_1183176811_byn.jpg'); }
+      .carousel-slide:nth-child(2) { background-image: url('img/shutterstock_1133539268byn.jpg'); }
+      .carousel-slide:nth-child(3) { background-image: url('img/shutterstock_1463595074.jpg'); }
+      .carousel-slide:nth-child(4) { background-image: url('img/shutterstock_1647549043.jpg'); }
+      .carousel-slide:nth-child(5) { background-image: url('img/shutterstock_1887837139.jpg'); }
+      .carousel-slide:nth-child(6) { background-image: url('img/shutterstock_2281800443.jpg'); }
+
+      /* Hero text over carousel */
+      .hero-content {
+        position: absolute;
+        bottom: 80px;
+        left: 48px;
+        z-index: 10;
+        max-width: 700px;
+      }
+
+      .hero-content h1 {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 700;
+        font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+        color: #fff;
+        line-height: 1.12;
+        letter-spacing: -0.5px;
+      }
+
+      /* Carousel dots */
+      .carousel-dots {
+        position: absolute;
+        bottom: 36px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        display: flex;
+        gap: 10px;
+      }
+
+      .carousel-dots .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.4);
+        cursor: pointer;
+        transition: background 0.3s, transform 0.3s;
+        border: none;
+        padding: 0;
+      }
+
+      .carousel-dots .dot.active {
         background: var(--brand);
-        padding: 40px 24px;
-        text-align: center;
+        transform: scale(1.3);
       }
 
-      .band h2 {
+      /* ─── CTA / CONTACT SECTION ───────────────────────────────── */
+      .cta-section {
+        background: var(--brand);
+        padding: 72px 48px;
+      }
+
+      .cta-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: start;
+      }
+
+      .cta-left {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .cta-left .cta-brand {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .cta-left .cta-brand-text {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 700;
+        font-size: 22px;
+        color: var(--dark);
+      }
+
+      .cta-left .cta-brand-icon img {
+        height: 36px;
+        width: auto;
+        display: block;
+      }
+
+      .cta-left .cta-start {
+        display: inline-block;
+        border: 1.5px solid var(--dark);
+        color: var(--dark);
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 22px;
+        border-radius: 20px;
+        text-decoration: none;
+        width: fit-content;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .cta-left .cta-start:hover {
+        background: var(--dark);
+        color: var(--brand);
+      }
+
+      .cta-left h2 {
         font-family: 'Barlow Condensed', sans-serif;
         font-weight: 900;
-        font-size: clamp(1.8rem, 4vw, 2.8rem);
-        text-transform: uppercase;
+        font-size: clamp(2.4rem, 5vw, 3.8rem);
         color: var(--dark);
+        line-height: 1.08;
+        margin-top: 20px;
+      }
+
+      .cta-form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .cta-form input,
+      .cta-form textarea {
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        padding: 14px 18px;
+        border: 1.5px solid var(--dark);
+        border-radius: var(--radius);
+        background: transparent;
+        color: var(--dark);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      .cta-form input::placeholder,
+      .cta-form textarea::placeholder {
+        color: rgba(17,17,17,0.45);
+      }
+
+      .cta-form input:focus,
+      .cta-form textarea:focus {
+        border-color: var(--dark);
+        box-shadow: 0 0 0 3px rgba(17,17,17,0.12);
+      }
+
+      .cta-form textarea {
+        resize: vertical;
+        min-height: 48px;
+      }
+
+      .cta-form .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .cta-form .btn-submit {
+        background: var(--dark);
+        color: var(--brand);
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
         letter-spacing: 1px;
-        margin-bottom: 6px;
+        text-transform: uppercase;
+        padding: 16px;
+        border: none;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: background 0.15s, transform 0.15s;
       }
 
-      .band p {
-        font-size: 15px;
-        color: #333;
-        max-width: 460px;
-        margin: 0 auto;
-        line-height: 1.6;
+      .cta-form .btn-submit:hover {
+        background: #333;
+        transform: translateY(-1px);
       }
 
-      /* ─── SHARED SECTION TITLES ───────────────────────────────── */
+      /* ─── MODULES ─────────────────────────────────────────────── */
+      .modules-section {
+        background: #fff;
+        padding: 72px 48px;
+      }
+
       .section-title {
         font-family: 'Barlow Condensed', sans-serif;
         font-weight: 900;
@@ -165,12 +358,6 @@
         color: var(--muted);
         font-size: 15px;
         margin-bottom: 48px;
-      }
-
-      /* ─── MODULES ─────────────────────────────────────────────── */
-      .modules-section {
-        background: #fff;
-        padding: 72px 24px;
       }
 
       .modules-grid {
@@ -235,79 +422,19 @@
         color: #fff;
       }
 
-      /* ─── SCREENSHOTS ─────────────────────────────────────────── */
-      .screenshots-section {
-        background: var(--surface);
-        padding: 72px 24px;
-        border-top: 1px solid var(--border);
-      }
-
-      .screenshots-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 24px;
-        max-width: 1000px;
-        margin: 0 auto;
-      }
-
-      .screenshot-item {
-        background: #fff;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-        transition: box-shadow 0.2s, transform 0.2s;
-      }
-
-      .screenshot-item:hover {
-        box-shadow: 0 10px 32px rgba(0,0,0,0.12);
-        transform: translateY(-4px);
-      }
-
-      .screenshot-item img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        display: block;
-      }
-
-      .screenshot-item .img-placeholder {
-        width: 100%;
-        height: 220px;
-        background: #EFEFEF;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        color: #aaa;
-        font-size: 13px;
-        text-align: center;
-      }
-
-      .screenshot-item .img-placeholder span { font-size: 36px; }
-
-      .screenshot-item .screen-caption {
-        padding: 14px 16px;
-        font-weight: 600;
-        font-size: 14px;
-        color: var(--dark);
-        border-top: 1px solid var(--border);
-      }
-
       /* ─── FOOTER ──────────────────────────────────────────────── */
       footer {
         margin-top: auto;
-        background: #fff;
-        border-top: 1px solid var(--border);
+        background: var(--dark);
+        border-top: 1px solid rgba(255,255,255,0.1);
         text-align: center;
         padding: 28px 24px;
         font-size: 13px;
-        color: var(--muted);
+        color: rgba(255,255,255,0.5);
       }
 
       footer a {
-        color: var(--dark);
+        color: var(--brand);
         font-weight: 600;
         text-decoration: underline;
       }
@@ -315,10 +442,20 @@
       footer a:hover { color: var(--brand-dark); }
 
       /* ─── RESPONSIVE ──────────────────────────────────────────── */
-      @media (max-width: 520px) {
-        header { padding: 0 20px; }
+      @media (max-width: 768px) {
+        header { padding: 20px 24px; }
+        .nav-links { display: none; }
+        .hero-content { left: 24px; bottom: 60px; }
+        .hero-content h1 { font-size: clamp(2rem, 8vw, 3rem); }
+        .cta-section { padding: 48px 24px; }
+        .cta-inner { grid-template-columns: 1fr; gap: 40px; }
+        .modules-section { padding: 48px 24px; }
         .modules-grid { grid-template-columns: 1fr 1fr; }
-        .screenshots-grid { grid-template-columns: 1fr; }
+      }
+
+      @media (max-width: 480px) {
+        .modules-grid { grid-template-columns: 1fr; }
+        .cta-form .form-row { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -327,35 +464,65 @@
     <!-- ════════════════ HEADER ════════════════ -->
     <header>
       <a class="logo" href="#">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 5h6.5a3.5 3.5 0 0 1 0 7H6V5z" fill="#F5C800"/>
-            <path d="M6 12h7a3.5 3.5 0 0 1 0 7H6v-7z" fill="#F5C800"/>
-          </svg>
-        </div>
-        <div class="logo-text">
-          <span class="name">Brikon</span>
-          <span class="tagline">The Developer's ERP</span>
-        </div>
+        <img src="img/Brikon_logotipo_blanco.png" alt="Brikon — The Developer's ERP" />
       </a>
-
-      <a class="btn-login" href="https://brikon.com.mx" target="_blank" rel="noopener">
-        Log In
-      </a>
+      <div class="header-right">
+        <a class="btn-login" href="https://brikon.com.mx" target="_blank" rel="noopener">Log In</a>
+        <a class="btn-contact" href="#contacto">Contáctanos</a>
+      </div>
     </header>
 
     <main>
 
-      <!-- ════════════════ HERO ════════════════ -->
-      <section class="hero">
-        <img src="img/BRIKON3.png" alt="Construir una mejor visión de tu proyecto" />
+      <!-- ════════════════ HERO CAROUSEL ════════════════ -->
+      <section class="hero" id="hero">
+        <div class="carousel-slide active"></div>
+        <div class="carousel-slide"></div>
+        <div class="carousel-slide"></div>
+        <div class="carousel-slide"></div>
+        <div class="carousel-slide"></div>
+        <div class="carousel-slide"></div>
+
+        <div class="hero-content">
+          <h1>Te damos<br>una mejor visión<br>de tu proyecto.</h1>
+        </div>
+
+        <div class="carousel-dots">
+          <button class="dot active" data-index="0" aria-label="Slide 1"></button>
+          <button class="dot" data-index="1" aria-label="Slide 2"></button>
+          <button class="dot" data-index="2" aria-label="Slide 3"></button>
+          <button class="dot" data-index="3" aria-label="Slide 4"></button>
+          <button class="dot" data-index="4" aria-label="Slide 5"></button>
+          <button class="dot" data-index="5" aria-label="Slide 6"></button>
+        </div>
       </section>
 
-      <!-- ════════════════ YELLOW BAND ════════════════ -->
-      <div class="band">
-        <h2>Claridad para cada decisión</h2>
-        <p>¿Con qué deseas trabajar hoy? Todo lo que necesitas para tu proyecto en un solo lugar.</p>
-      </div>
+      <!-- ════════════════ CTA / CONTACTO ════════════════ -->
+      <section class="cta-section" id="contacto">
+        <div class="cta-inner">
+          <div class="cta-left">
+            <div class="cta-brand">
+              <span class="cta-brand-text">The Developer's ERP</span>
+              <div class="cta-brand-icon">
+                
+              </div>
+            </div>
+            <a class="cta-start" href="#">Comienza ahora mismo</a>
+            <h2>Múltiples<br>ubicaciones,<br>una misma<br>herramienta</h2>
+          </div>
+
+          <form class="cta-form" action="#" method="post">
+            <input type="text" name="name" placeholder="Nombre Completo" required />
+            <input type="email" name="email" placeholder="Correo electrónico" required />
+            <textarea name="comment" placeholder="Comentario:" rows="2"></textarea>
+            <div class="form-row">
+              <input type="tel" name="phone" placeholder="Teléfono" />
+              <input type="text" name="company" placeholder="Empresa" />
+            </div>
+            <button type="submit" class="btn-submit">Enviar</button>
+          </form>
+        </div>
+      </section>
 
       <!-- ════════════════ MÓDULOS ════════════════ -->
       <section class="modules-section">
@@ -393,65 +560,6 @@
         </div>
       </section>
 
-      <!-- ════════════════ SCREENSHOTS ════════════════ -->
-      <section class="screenshots-section">
-        <h2 class="section-title">La plataforma en acción</h2>
-        <p class="section-sub">Así se ve Brikon por dentro</p>
-
-        <div class="screenshots-grid">
-
-          <!--
-            ╔══════════════════════════════════════════════════════════╗
-            ║  CÓMO AGREGAR TUS IMÁGENES                               ║
-            ║                                                          ║
-            ║  1. Crea una carpeta llamada "img" en la misma carpeta   ║
-            ║     donde está este index.html                           ║
-            ║                                                          ║
-            ║  2. Guarda tus screenshots ahí con el nombre que         ║
-            ║     quieras, por ejemplo:                                ║
-            ║       img/dashboard.png                                  ║
-            ║       img/ventas.png                                     ║
-            ║       img/escrituracion.png                              ║
-            ║                                                          ║
-            ║  3. En cada .screenshot-item de abajo, borra el          ║
-            ║     <div class="img-placeholder">...</div>               ║
-            ║     y pon en su lugar:                                   ║
-            ║       <img src="img/dashboard.png" alt="Dashboard" />    ║
-            ║                                                          ║
-            ║  4. Cambia el texto del .screen-caption si quieres       ║
-            ╚══════════════════════════════════════════════════════════╝
-          -->
-
-          <div class="screenshot-item">
-            <!-- ▼ REEMPLAZAR ESTE DIV CON TU <img> ▼ -->
-            <div class="img-placeholder">
-              <span>🖼️</span>
-              Agrega tu imagen aquí<br/><small>img/screenshot-1.png</small>
-            </div>
-            <div class="screen-caption">Dashboard principal</div>
-          </div>
-
-          <div class="screenshot-item">
-            <!-- ▼ REEMPLAZAR ESTE DIV CON TU <img> ▼ -->
-            <div class="img-placeholder">
-              <span>�️</span>
-              Agrega tu imagen aquí<br/><small>img/screenshot-2.png</small>
-            </div>
-            <div class="screen-caption">Módulo de ventas</div>
-          </div>
-
-          <div class="screenshot-item">
-            <!-- ▼ REEMPLAZAR ESTE DIV CON TU <img> ▼ -->
-            <div class="img-placeholder">
-              <span>🖼️</span>
-              Agrega tu imagen aquí<br/><small>img/screenshot-3.png</small>
-            </div>
-            <div class="screen-caption">Escrituración</div>
-          </div>
-
-        </div>
-      </section>
-
     </main>
 
     <!-- ════════════════ FOOTER ════════════════ -->
@@ -463,6 +571,41 @@
         </a>
       </p>
     </footer>
+
+    <!-- ════════════════ CAROUSEL SCRIPT ════════════════ -->
+    <script>
+      (function () {
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots   = document.querySelectorAll('.carousel-dots .dot');
+        let current  = 0;
+        let timer    = null;
+
+        function goTo(index) {
+          slides[current].classList.remove('active');
+          dots[current].classList.remove('active');
+          current = (index + slides.length) % slides.length;
+          slides[current].classList.add('active');
+          dots[current].classList.add('active');
+        }
+
+        function next() { goTo(current + 1); }
+
+        function startTimer() {
+          clearInterval(timer);
+          timer = setInterval(next, 5000);
+        }
+
+        // Dot click
+        dots.forEach(function (dot) {
+          dot.addEventListener('click', function () {
+            goTo(parseInt(this.dataset.index, 10));
+            startTimer();
+          });
+        });
+
+        startTimer();
+      })();
+    </script>
 
   </body>
 </html>
