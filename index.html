@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Brikon — The Developer's ERP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --brand:      #F5C800;
+        --brand-dark: #D4AC00;
+        --dark:       #111111;
+        --bg:         #ffffff;
+        --surface:    #F7F7F7;
+        --border:     #E8E8E8;
+        --text:       #111111;
+        --muted:      #666666;
+        --radius:     6px;
+      }
+
+      html, body {
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* ─── HEADER ──────────────────────────────────────────────── */
+      header {
+        background: var(--brand);
+        padding: 0 40px;
+        height: 68px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+
+      .logo-icon {
+        background: var(--dark);
+        border-radius: 4px;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .logo-icon svg { width: 24px; height: 24px; }
+
+      .logo-text {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+      }
+
+      .logo-text .name {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 900;
+        font-size: 24px;
+        letter-spacing: 2.5px;
+        color: var(--dark);
+        text-transform: uppercase;
+      }
+
+      .logo-text .tagline {
+        font-size: 10px;
+        color: var(--dark);
+        opacity: 0.6;
+        letter-spacing: 0.4px;
+        font-weight: 500;
+      }
+
+      .btn-login {
+        background: var(--dark);
+        color: #fff;
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 10px 28px;
+        border-radius: var(--radius);
+        text-decoration: none;
+        transition: background 0.15s, transform 0.15s;
+      }
+
+      .btn-login:hover { background: #333; transform: translateY(-1px); }
+
+      /* ─── HERO ────────────────────────────────────────────────── */
+      .hero {
+        width: 100%;
+        min-height: 300px;
+        max-height: 85vh;
+        display: block;
+        overflow: hidden;
+      }
+
+      .hero img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+      }
+
+      /* ─── YELLOW BAND ─────────────────────────────────────────── */
+      .band {
+        background: var(--brand);
+        padding: 40px 24px;
+        text-align: center;
+      }
+
+      .band h2 {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 900;
+        font-size: clamp(1.8rem, 4vw, 2.8rem);
+        text-transform: uppercase;
+        color: var(--dark);
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+      }
+
+      .band p {
+        font-size: 15px;
+        color: #333;
+        max-width: 460px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+
+      /* ─── SHARED SECTION TITLES ───────────────────────────────── */
+      .section-title {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 900;
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        color: var(--dark);
+      }
+
+      .section-sub {
+        text-align: center;
+        color: var(--muted);
+        font-size: 15px;
+        margin-bottom: 48px;
+      }
+
+      /* ─── MODULES ─────────────────────────────────────────────── */
+      .modules-section {
+        background: #fff;
+        padding: 72px 24px;
+      }
+
+      .modules-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      .module-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-top: 4px solid var(--brand);
+        border-radius: var(--radius);
+        padding: 28px 22px 24px;
+        transition: box-shadow 0.2s, transform 0.2s;
+      }
+
+      .module-card:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.09);
+        transform: translateY(-3px);
+      }
+
+      .module-card .mod-icon {
+        font-size: 28px;
+        margin-bottom: 14px;
+        display: block;
+      }
+
+      .module-card h3 {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--dark);
+        margin-bottom: 8px;
+      }
+
+      .module-card p {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .module-card .btn-continue {
+        display: inline-block;
+        margin-top: 16px;
+        border: 1.5px solid var(--dark);
+        color: var(--dark);
+        font-size: 13px;
+        font-weight: 600;
+        padding: 7px 18px;
+        border-radius: var(--radius);
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .module-card .btn-continue:hover {
+        background: var(--dark);
+        color: #fff;
+      }
+
+      /* ─── SCREENSHOTS ─────────────────────────────────────────── */
+      .screenshots-section {
+        background: var(--surface);
+        padding: 72px 24px;
+        border-top: 1px solid var(--border);
+      }
+
+      .screenshots-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .screenshot-item {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+        transition: box-shadow 0.2s, transform 0.2s;
+      }
+
+      .screenshot-item:hover {
+        box-shadow: 0 10px 32px rgba(0,0,0,0.12);
+        transform: translateY(-4px);
+      }
+
+      .screenshot-item img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .screenshot-item .img-placeholder {
+        width: 100%;
+        height: 220px;
+        background: #EFEFEF;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: #aaa;
+        font-size: 13px;
+        text-align: center;
+      }
+
+      .screenshot-item .img-placeholder span { font-size: 36px; }
+
+      .screenshot-item .screen-caption {
+        padding: 14px 16px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--dark);
+        border-top: 1px solid var(--border);
+      }
+
+      /* ─── FOOTER ──────────────────────────────────────────────── */
+      footer {
+        margin-top: auto;
+        background: #fff;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        padding: 28px 24px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      footer a {
+        color: var(--dark);
+        font-weight: 600;
+        text-decoration: underline;
+      }
+
+      footer a:hover { color: var(--brand-dark); }
+
+      /* ─── RESPONSIVE ──────────────────────────────────────────── */
+      @media (max-width: 520px) {
+        header { padding: 0 20px; }
+        .modules-grid { grid-template-columns: 1fr 1fr; }
+        .screenshots-grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <!-- ════════════════ HEADER ════════════════ -->
+    <header>
+      <a class="logo" href="#">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 5h6.5a3.5 3.5 0 0 1 0 7H6V5z" fill="#F5C800"/>
+            <path d="M6 12h7a3.5 3.5 0 0 1 0 7H6v-7z" fill="#F5C800"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="name">Brikon</span>
+          <span class="tagline">The Developer's ERP</span>
+        </div>
+      </a>
+
+      <a class="btn-login" href="https://brikon.com.mx" target="_blank" rel="noopener">
+        Log In
+      </a>
+    </header>
+
+    <main>
+
+      <!-- ════════════════ HERO ════════════════ -->
+      <section class="hero">
+        <img src="img/BRIKON3.png" alt="Construir una mejor visión de tu proyecto" />
+      </section>
+
+      <!-- ════════════════ YELLOW BAND ════════════════ -->
+      <div class="band">
+        <h2>Claridad para cada decisión</h2>
+        <p>¿Con qué deseas trabajar hoy? Todo lo que necesitas para tu proyecto en un solo lugar.</p>
+      </div>
+
+      <!-- ════════════════ MÓDULOS ════════════════ -->
+      <section class="modules-section">
+        <h2 class="section-title">Nuestros módulos</h2>
+        <p class="section-sub">Todo lo que necesitas para gestionar tu desarrollo inmobiliario</p>
+
+        <div class="modules-grid">
+          <div class="module-card">
+            <span class="mod-icon">💬</span>
+            <h3>WhatsApp</h3>
+            <p>Módulo de administración de WhatsApp para comunicarte con clientes y equipos.</p>
+            <a class="btn-continue" href="https://brikon.com.mx" target="_blank" rel="noopener">Continuar</a>
+          </div>
+
+          <div class="module-card">
+            <span class="mod-icon">👥</span>
+            <h3>Administración de usuarios</h3>
+            <p>Gestión de usuarios, asignación de módulos y proyectos.</p>
+            <a class="btn-continue" href="https://brikon.com.mx" target="_blank" rel="noopener">Continuar</a>
+          </div>
+
+          <div class="module-card">
+            <span class="mod-icon">🏢</span>
+            <h3>Escrituración</h3>
+            <p>Administración, integración y escrituración de propiedades.</p>
+            <a class="btn-continue" href="https://brikon.com.mx" target="_blank" rel="noopener">Continuar</a>
+          </div>
+
+          <div class="module-card">
+            <span class="mod-icon">📊</span>
+            <h3>Administración de la venta</h3>
+            <p>Gestiona cotizaciones, cierres y seguimiento de clientes.</p>
+            <a class="btn-continue" href="https://brikon.com.mx" target="_blank" rel="noopener">Continuar</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ SCREENSHOTS ════════════════ -->
+      <section class="screenshots-section">
+        <h2 class="section-title">La plataforma en acción</h2>
+        <p class="section-sub">Así se ve Brikon por dentro</p>
+
+        <div class="screenshots-grid">
+
+          <!--
+            ╔══════════════════════════════════════════════════════════╗
+            ║  CÓMO AGREGAR TUS IMÁGENES                               ║
+            ║                                                          ║
+            ║  1. Crea una carpeta llamada "img" en la misma carpeta   ║
+            ║     donde está este index.html                           ║
+            ║                                                          ║
+            ║  2. Guarda tus screenshots ahí con el nombre que         ║
+            ║     quieras, por ejemplo:                                ║
+            ║       img/dashboard.png                                  ║
+            ║       img/ventas.png                                     ║
+            ║       img/escrituracion.png                              ║
+            ║                                                          ║
+            ║  3. En cada .screenshot-item de abajo, borra el          ║
+            ║     <div class="img-placeholder">...</div>               ║
+            ║     y pon en su lugar:                                   ║
+            ║       <img src="img/dashboard.png" alt="Dashboard" />    ║
+            ║                                                          ║
+            ║  4. Cambia el texto del .screen-caption si quieres       ║
+            ╚══════════════════════════════════════════════════════════╝
+          -->
+
+          <div class="screenshot-item">
+            <!-- ▼ REEMPLAZAR ESTE DIV CON TU <img> ▼ -->
+            <div class="img-placeholder">
+              <span>🖼️</span>
+              Agrega tu imagen aquí<br/><small>img/screenshot-1.png</small>
+            </div>
+            <div class="screen-caption">Dashboard principal</div>
+          </div>
+
+          <div class="screenshot-item">
+            <!-- ▼ REEMPLAZAR ESTE DIV CON TU <img> ▼ -->
+            <div class="img-placeholder">
+              <span>�️</span>
+              Agrega tu imagen aquí<br/><small>img/screenshot-2.png</small>
+            </div>
+            <div class="screen-caption">Módulo de ventas</div>
+          </div>
+
+          <div class="screenshot-item">
+            <!-- ▼ REEMPLAZAR ESTE DIV CON TU <img> ▼ -->
+            <div class="img-placeholder">
+              <span>🖼️</span>
+              Agrega tu imagen aquí<br/><small>img/screenshot-3.png</small>
+            </div>
+            <div class="screen-caption">Escrituración</div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ════════════════ FOOTER ════════════════ -->
+    <footer>
+      <p>
+        &copy; 2026 Brikon &nbsp;·&nbsp;
+        <a href="https://documentos.brikon.com.mx/privacy" target="_blank" rel="noopener">
+          Política de Privacidad
+        </a>
+      </p>
+    </footer>
+
+  </body>
+</html>
